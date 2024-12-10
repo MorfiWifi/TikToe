@@ -1,4 +1,6 @@
 using System.Reflection;
+using Application.Interfaces;
+using Application.Services;
 using RestApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,12 @@ builder.Services.AddEndpointsFromAssembly(Assembly.GetExecutingAssembly());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+//register custom services
+builder.Services.AddSingleton<ITickToeHandler, TickToeHandler>();
+builder.Services.AddScoped<IGameService, GameService>();
+
 
 var app = builder.Build();
 
