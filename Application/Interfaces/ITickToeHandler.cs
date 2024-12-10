@@ -5,5 +5,10 @@ namespace Application.Interfaces;
 
 public interface ITickToeHandler
 {
-    GameStatusEnum GetGameStatus(GameStateDto state1);
+    /// <summary>
+    /// find out winner or game status base on current sate
+    /// </summary>
+    /// <param name="state">state of game</param>
+    /// <returns>state enum</returns>
+    GameStatusEnum GetGameStatus(GameStateDto state);
 }

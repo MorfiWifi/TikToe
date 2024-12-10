@@ -84,7 +84,7 @@ public class GameRules
         };
         
         var status = _tickToeHandler.GetGameStatus(state1);
-        Assert.True(GameStatusEnum.WinnerO ==  status , "Winner should be X in state1" );
+        Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
         var state2 = new GameStateDto
@@ -149,7 +149,7 @@ public class GameRules
         };
         
         status = _tickToeHandler.GetGameStatus(state2);
-        Assert.True(GameStatusEnum.WinnerO ==  status , "Winner should be O in state1" );
+        Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
         
     }
     
@@ -180,13 +180,13 @@ public class GameRules
         {
             Cells =
             [
-                ['x', 'x', 'o'],
+                ['o', 'x', 'o'],
                 ['o', 'x', 'o'],
                 ['x', 'o', 'x']
             ]
         };
         
         var status = _tickToeHandler.GetGameStatus(state1);
-        Assert.True(GameStatusEnum.Draw ==  status , "should ne draw in state1 , now winner!" );
+        Assert.True(GameStatusEnum.Draw ==  status , "should be draw in state1 , no winner!" );
     }
 }
