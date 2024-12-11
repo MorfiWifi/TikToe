@@ -1,6 +1,11 @@
 using System.Reflection;
 using Application.Interfaces;
 using Application.Services;
+using Data;
+using Data.Interfaces;
+using Data.Repositories;
+using Domain;
+using Microsoft.EntityFrameworkCore;
 using RestApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +25,25 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IActionService, ActionService>();
 
 
+var configuration = builder.Configuration;
+builder.Services.AddDbContext<TickToeDbContext>(
+    options => options.UseSqlite(configuration.GetConnectionString("TickToeDbContext")));
+
+//register repositories
+builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IActionRepository, ActionRepository>();
+
+
 var app = builder.Build();
+
+// Create database if it doesn't exist
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TickToeDbContext>();
+    var dbExist = dbContext.Database.EnsureCreated(); 
+    if (dbExist is false)
+        dbContext.Database.Migrate();
+}
 
 //use middle ware exception handler
 app.UseMiddleware<HttpExceptionMiddleware>();
