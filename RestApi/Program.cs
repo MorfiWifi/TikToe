@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 //register custom services
 builder.Services.AddSingleton<ITickToeHandler, TickToeHandler>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IActionService, ActionService>();
 
 
 var app = builder.Build();

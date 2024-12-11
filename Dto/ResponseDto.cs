@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Dto;
+namespace Dto.Game;
 
 /// <summary>
 /// generic response from server

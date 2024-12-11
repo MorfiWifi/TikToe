@@ -1,4 +1,4 @@
-﻿namespace Dto;
+﻿namespace Dto.Game;
 
 /// <summary>
 /// containing basic fields required on server endpoints

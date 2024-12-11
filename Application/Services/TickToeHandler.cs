@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
 using Common.Enums;
-using Dto;
+using Dto.Game;
 
 namespace Application.Services;
 
@@ -10,32 +10,32 @@ public class TickToeHandler : ITickToeHandler
     private const char OCharacter = 'o';
     
     
-    public GameStatusEnum GetGameStatus(GameStateDto state)
+    public GameStatusEnum GetGameStatus(GameBaseStateDto baseState)
     {
-        if(state.Cells is null)
+        if(baseState.Cells is null)
             throw new Exception("invalid state");
         
         for (int col = 0; col < 3; col++)
         {
             //coll base
-            if (state.Cells[col].All(x => x == XCharacter))
+            if (baseState.Cells[col].All(x => x == XCharacter))
                 return GameStatusEnum.WinnerX;
-            if (state.Cells[col].All(x => x == OCharacter))
+            if (baseState.Cells[col].All(x => x == OCharacter))
                 return GameStatusEnum.WinnerO;
 
             //row base
-            if (state.Cells[0][col] == state.Cells[1][col] && state.Cells[1][col] == state.Cells[2][col])
+            if (baseState.Cells[0][col] == baseState.Cells[1][col] && baseState.Cells[1][col] == baseState.Cells[2][col])
             {
-                return state.Cells[0][col] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
+                return baseState.Cells[0][col] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
             }
         }
         
         //cross A
-        if(state.Cells[0][0] == state.Cells[1][1] && state.Cells[1][1] == state.Cells[2][2])
-            return state.Cells[0][0] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
+        if(baseState.Cells[0][0] == baseState.Cells[1][1] && baseState.Cells[1][1] == baseState.Cells[2][2])
+            return baseState.Cells[0][0] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
         //cross B
-        if(state.Cells[0][2] == state.Cells[1][1] && state.Cells[1][1] == state.Cells[2][0])
-            return state.Cells[0][2] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
+        if(baseState.Cells[0][2] == baseState.Cells[1][1] && baseState.Cells[1][1] == baseState.Cells[2][0])
+            return baseState.Cells[0][2] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
 
         //empty cell exist to play
         for (var i = 0; i < 9; i++)
@@ -43,7 +43,7 @@ public class TickToeHandler : ITickToeHandler
             var col = i / 3;
             var row = i % 3;
             
-            if (state.Cells[col][row] == ' ')
+            if (baseState.Cells[col][row] == ' ')
                 return GameStatusEnum.ShouldContinue;
         }
         

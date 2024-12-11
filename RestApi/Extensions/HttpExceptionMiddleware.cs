@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Dto;
+using Dto.Game;
 
 namespace RestApi.Extensions;
 
@@ -22,7 +22,7 @@ public class HttpExceptionMiddleware(RequestDelegate next , ILogger<HttpExceptio
         catch (Exception ex)
         {
             logger.LogError(ex , "Generic Exception handled by HttpExceptionMiddleware");
-            await HandleExceptionAsync(context, "خطایی رخ داده است");
+            await HandleExceptionAsync(context, "Error occurred while processing request");
         }
     }
 

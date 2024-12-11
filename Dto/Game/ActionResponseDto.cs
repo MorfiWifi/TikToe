@@ -1,8 +1,8 @@
-﻿namespace Dto.Game;
+﻿namespace Dto.Game.Game;
 
 public class ActionResponseDto
 {
     public bool GameEnded { get; set; }
     public string PlayerTurn { get; set; } = string.Empty;
-    public GameStateDto? GameState { get; set; } 
+    public GameBaseStateDto? GameState { get; set; } 
 }

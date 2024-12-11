@@ -1,4 +1,4 @@
-﻿namespace Dto.Game;
+﻿namespace Dto.Game.Game;
 
 public class PlayActionDto : RequestDto
 {

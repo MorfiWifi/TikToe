@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dto;
+namespace Dto.Game;
 
 public class ExceptionDto : Exception
 {

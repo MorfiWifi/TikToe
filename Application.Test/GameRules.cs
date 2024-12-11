@@ -1,7 +1,7 @@
 using Application.Interfaces;
 using Application.Services;
 using Common.Enums;
-using Dto;
+using Dto.Game;
 using Xunit.Abstractions;
 
 namespace Application.Test;
@@ -26,7 +26,7 @@ public class GameRules
     [Fact]
     public void Three_Same_Column_Winner()
     {
-        var state1 = new GameStateDto
+        var state1 = new GameBaseStateDto
         {
             Cells =
             [
@@ -40,7 +40,7 @@ public class GameRules
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
-        var state2 = new GameStateDto
+        var state2 = new GameBaseStateDto
         {
             Cells =
             [
@@ -54,7 +54,7 @@ public class GameRules
         Assert.True(GameStatusEnum.WinnerO ==  status , "Winner should be O in state1" );
 
 
-        var state3 = new GameStateDto
+        var state3 = new GameBaseStateDto
         {
             Cells =
             [
@@ -73,7 +73,7 @@ public class GameRules
     [Fact]
     public void Three_Same_Row_Winner()
     {
-        var state1 = new GameStateDto
+        var state1 = new GameBaseStateDto
         {
             Cells =
             [
@@ -87,7 +87,7 @@ public class GameRules
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
-        var state2 = new GameStateDto
+        var state2 = new GameBaseStateDto
         {
             Cells =
             [
@@ -101,7 +101,7 @@ public class GameRules
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
-        var state3 = new GameStateDto
+        var state3 = new GameBaseStateDto
         {
             Cells =
             [
@@ -124,7 +124,7 @@ public class GameRules
     [Fact]
     public void Cross_Winner()
     {
-        var state1 = new GameStateDto
+        var state1 = new GameBaseStateDto
         {
             Cells =
             [
@@ -138,7 +138,7 @@ public class GameRules
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
-        var state2 = new GameStateDto
+        var state2 = new GameBaseStateDto
         {
             Cells =
             [
@@ -157,7 +157,7 @@ public class GameRules
     [Fact]
     public void NO_Winner_Samples()
     {
-        var state1 = new GameStateDto
+        var state1 = new GameBaseStateDto
         {
             Cells =
             [
@@ -176,7 +176,7 @@ public class GameRules
     public void Draw_Samples()
     {
         
-        var state1 = new GameStateDto
+        var state1 = new GameBaseStateDto
         {
             Cells =
             [
