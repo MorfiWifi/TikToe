@@ -52,14 +52,9 @@ public class GameEndpoints : IEndpointRoute
             if (action.Username is null)
                 throw new ExceptionDto("Invalid User Trying To Play Action");
 
-            var couldFindGame = gameService.GameExists(gameId, action.Username);
-
-            if (couldFindGame is false)
-                throw new ExceptionDto("Game not found");
-
             var actionResult = gameService.PlayAction(gameId, action);
 
-            var result = new ResponseDto<ActionResponseDto>()
+            var result = new ResponseDto<GameStateDto>()
             {
                 Data = actionResult,
                 IsOk = true,

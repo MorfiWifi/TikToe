@@ -1,0 +1,205 @@
+﻿@page "/"
+@using Common.Enums
+@using Dto.Game
+@using Dto.Game.Game
+@using RestClient.Interfaces
+
+@inject IJSRuntime JsRuntime
+@inject IGameService GameService
+
+@rendermode InteractiveServer
+
+<h3>Tic-Toe</h3>
+
+@if (string.IsNullOrEmpty(UserName))
+{
+    <div>
+        <h4>Enter your username:</h4>
+        <input @bind="TempUserName" placeholder="Enter username"/>
+        <button @onclick="SaveUserName">Save</button>
+    </div>
+}
+else if (string.IsNullOrEmpty(GameId))
+{
+    <div>
+        <h4>Welcome, @UserName!</h4>
+        <p>Choose an option:</p>
+        <button @onclick="CreateNewGame">Create New Game</button>
+        <input @bind="TempGameId" placeholder="Enter Game ID to Join"/>
+        <button @onclick="JoinGame">Join Game</button>
+    </div>
+}
+else
+{
+    <div>
+        <h4>Game ID: @GameId</h4>
+        @if (GameState.Status == GameStatusEnum.WinnerX || GameState.Status == GameStatusEnum.WinnerO || GameState.Status == GameStatusEnum.Draw)
+        {
+            <div class="game-status-banner">
+                <p>Game Over! Status: @GameState.Status</p>
+                <button @onclick="ExitGame">Exit Game</button>
+            </div>
+        }
+        else
+        {
+            <div>
+                <p>Current Turn: @GameState.Turn</p>
+                <p>Game Status: @GameState.Status</p>
+                <table class="game-board">
+                    @for (int i = 0; i < GameState.Cells.Length; i++)
+                    {
+                        <tr>
+                            @for (int j = 0; j < GameState.Cells[i].Length; j++)
+                            {
+                                <td>
+
+                                    @{
+                                        var column = i;
+                                        var row = j;
+                                    }
+
+                                    <button @onclick="(() => MakeMove(column, row))">
+                                        @GameState.Cells[column][row]
+                                    </button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+
+    </div>
+}
+
+@code {
+    private string? UserName { get; set; }
+    private string? TempUserName { get; set; }
+    private string? GameId { get; set; }
+    private string? TempGameId { get; set; }
+
+    private GameStateDto GameState { get; set; } = new GameStateDto
+    {
+        Cells = new char[][]
+        {
+            [' ', ' ', ' '],
+            [' ', ' ', ' '],
+            [' ', ' ', ' ']
+        },
+        Id = Guid.NewGuid(),
+        UserTurn = string.Empty,
+        Turn = 'X',
+        Status = GameStatusEnum.ShouldContinue
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            UserName = await JsRuntime.InvokeAsync<string?>("localStorage.getItem", "username");
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task SaveUserName()
+    {
+        await JsRuntime.InvokeVoidAsync("console.log", $"username: {UserName}");
+        Console.WriteLine("save username clicked ...");
+        if (string.IsNullOrEmpty(TempUserName) is false)
+        {
+            UserName = TempUserName;
+            await JsRuntime.InvokeVoidAsync("localStorage.setItem", "username", UserName);
+            Console.WriteLine("username updated ...");
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task CreateNewGame()
+    {
+        var rquest = new RequestDto
+        {
+            Username = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "username")
+        };
+
+        var result = await GameService.CreateNewGame(rquest);
+
+        if (result.IsOk is false)
+        {
+            await JsRuntime.InvokeVoidAsync( "alert", $"failed to create new game {string.Join(',' ,result.Errors)}");
+            return;
+        }
+        
+        GameState = result.Data!;
+        
+        StateHasChanged();
+    }
+
+    private async Task JoinGame()
+    {
+        if (string.IsNullOrEmpty(TempGameId))
+        {
+            await JsRuntime.InvokeVoidAsync( "alert", "Please fill up game Id ");
+            return;
+        }
+
+        var rquest = new RequestDto
+        {
+            Username = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "username")
+        };
+
+        var result = await GameService.JoinGameById(new Guid(TempGameId), rquest);
+      
+        if (result.IsOk is false)
+        {
+            await JsRuntime.InvokeVoidAsync( "alert", $"failed to JoinGame {string.Join(',' ,result.Errors)}");
+            return;
+        }
+        
+        GameState = result.Data!;
+        
+        StateHasChanged();
+    }
+
+
+    private async Task MakeMove(int row, int col)
+    {
+        var request = new PlayActionDto()
+        {
+            X = col ,
+            Y = row,
+            Username = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "username")
+        };
+      var result =  await GameService.PlayAction(new Guid(TempGameId), request);
+      
+      if (result.IsOk is false)
+      {
+          await JsRuntime.InvokeVoidAsync( "alert", $"failed to MakeMove {string.Join(',' ,result.Errors)}");
+          return;
+      }
+    }
+
+
+    private void ExitGame()
+    {
+        GameId = null;
+        GameState = new GameStateDto
+        {
+            Cells = new char[][]
+            {
+                [' ', ' ', ' '],
+                [' ', ' ', ' '],
+                [' ', ' ', ' ']
+            },
+            Id = Guid.NewGuid(),
+            UserTurn = string.Empty,
+            Turn = 'X',
+            Status = GameStatusEnum.ShouldContinue
+        };
+        
+        StateHasChanged();
+    }
+
+}

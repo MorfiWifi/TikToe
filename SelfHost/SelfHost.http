@@ -1,0 +1,6 @@
+@SelfHost_HostAddress = http://localhost:5291
+
+GET {{SelfHost_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
