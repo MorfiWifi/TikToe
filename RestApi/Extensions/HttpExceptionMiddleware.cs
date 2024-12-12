@@ -36,7 +36,7 @@ public class HttpExceptionMiddleware(RequestDelegate next , ILogger<HttpExceptio
     {
         // Set response details
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.StatusCode =  200;
 
         // Create a standardized error response
         var errorResponse = new ResponseDto()

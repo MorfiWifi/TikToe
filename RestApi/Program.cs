@@ -40,9 +40,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<TickToeDbContext>();
-    var dbExist = dbContext.Database.EnsureCreated(); 
-    if (dbExist is false)
-        dbContext.Database.Migrate();
+    _ = dbContext.Database.EnsureCreated(); 
 }
 
 //use middle ware exception handler

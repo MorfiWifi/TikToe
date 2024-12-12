@@ -24,17 +24,17 @@ public class TickToeHandler : ITickToeHandler
                 return GameStatusEnum.WinnerO;
 
             //row base
-            if (baseState.Cells[0][col] == baseState.Cells[1][col] && baseState.Cells[1][col] == baseState.Cells[2][col])
+            if (baseState.Cells[0][col] == baseState.Cells[1][col] && baseState.Cells[1][col] == baseState.Cells[2][col] && baseState.Cells[2][col] != ' ')
             {
                 return baseState.Cells[0][col] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
             }
         }
         
         //cross A
-        if(baseState.Cells[0][0] == baseState.Cells[1][1] && baseState.Cells[1][1] == baseState.Cells[2][2])
+        if(baseState.Cells[0][0] == baseState.Cells[1][1] && baseState.Cells[1][1] == baseState.Cells[2][2] && baseState.Cells[2][2] != ' ')
             return baseState.Cells[0][0] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
         //cross B
-        if(baseState.Cells[0][2] == baseState.Cells[1][1] && baseState.Cells[1][1] == baseState.Cells[2][0])
+        if(baseState.Cells[0][2] == baseState.Cells[1][1] && baseState.Cells[1][1] == baseState.Cells[2][0] && baseState.Cells[2][0] != ' ')
             return baseState.Cells[0][2] == XCharacter ? GameStatusEnum.WinnerX : GameStatusEnum.WinnerO;
 
         //empty cell exist to play

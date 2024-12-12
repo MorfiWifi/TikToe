@@ -33,7 +33,9 @@ public class GameEndpoints : IEndpointRoute
 
         gameRoute.MapPost("CreateGame", (IGameService gameService, RequestDto request) =>
         {
-            var result = gameService.CreateNewGame(request);
+            var game = gameService.CreateNewGame(request);
+            
+            var result = new ResponseDto<GameStateDto> { Data = game, Code = 200, IsOk = true };
 
             return Results.Ok(result);
         });
@@ -54,12 +56,7 @@ public class GameEndpoints : IEndpointRoute
 
             var actionResult = gameService.PlayAction(gameId, action);
 
-            var result = new ResponseDto<GameStateDto>()
-            {
-                Data = actionResult,
-                IsOk = true,
-                Code = 200
-            };
+            var result = new ResponseDto<GameStateDto>() { Data = actionResult, IsOk = true, Code = 200 };
 
 
             return Results.Ok(result);

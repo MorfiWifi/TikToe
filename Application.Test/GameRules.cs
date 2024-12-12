@@ -189,4 +189,23 @@ public class GameRules
         var status = _tickToeHandler.GetGameStatus(state1);
         Assert.True(GameStatusEnum.Draw ==  status , "should be draw in state1 , no winner!" );
     }
+    
+    
+    [Fact]
+    public void Empty_Samples()
+    {
+        
+        var state1 = new GameBaseStateDto
+        {
+            Cells =
+            [
+                [' ', ' ', ' '],
+                [' ', ' ', ' '],
+                [' ', ' ', ' ']
+            ]
+        };
+        
+        var status = _tickToeHandler.GetGameStatus(state1);
+        Assert.True(GameStatusEnum.ShouldContinue ==  status , $"should be draw in state1 , no winner! NOT {status}" );
+    }
 }
