@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.MapperProfile;
+using Common.Enums;
 using Data.Interfaces;
 using Domain;
 using Dto.Game;
@@ -15,6 +16,9 @@ public class GameService(
     IActionRepository actionRepository
 ) : IGameService
 {
+    //todo: Implement Twos player mod!
+    
+    
     public GameStateDto PlayAction(Guid gameId, PlayActionDto action)
     {
         if (action.Username is null)
@@ -27,6 +31,9 @@ public class GameService(
 
         if (game is null)
             throw new ExceptionDto("Game not found");
+        
+        if (game.EndedAt is not null)
+            throw new ExceptionDto("Game has already ended");
 
         var charIndex = action.Y * 3 + action.X;
         if (charIndex >= 9 || game.Board[charIndex] != ' ')
@@ -53,10 +60,16 @@ public class GameService(
         actionRepository.GetDbSet().Add(persistedAction);
 
         game.Board = new string(arrayChar);
+        
+        //todo: this section applies only for single player 
+        PlayNextMoveAsPlayer('o', "system" , game);
+        
+        var result = Mapper.ToGameStateDto(game, tickToeHandler);
+        if (result.Status != GameStatusEnum.ShouldContinue)
+            game.EndedAt = DateTime.Now;
 
         gameRepository.SaveChanges();
-
-        var result = Mapper.ToGameStateDto(game, tickToeHandler);
+        
         return result;
     }
 
@@ -155,5 +168,36 @@ public class GameService(
         };
 
         return result;
+    }
+
+
+    private void PlayNextMoveAsPlayer(char player, string username, GameStatus game)
+    {
+       var gameModel = Mapper.ToGameStateDto(game, tickToeHandler);
+       var status = tickToeHandler.GetGameStatus(gameModel.Cells);
+       
+       //game already finished
+       if (status is not GameStatusEnum.ShouldContinue)
+           return;
+       
+       var (col,row) = tickToeHandler.FindNextMove(gameModel.Cells);
+       var index = col * 3 + row;
+       var boardCharArray = game.Board.ToCharArray();
+       boardCharArray[index] = player;
+       
+       game.Board = new string(boardCharArray);
+       
+       var persistedAction = new Action()
+       {
+           Id = Guid.NewGuid(),
+           X = col,
+           Y = row,
+           Username = username,
+           Character = player,
+           CratedAt = DateTime.Now,
+           GameStatusId = game.Id
+       };
+
+       actionRepository.GetDbSet().Add(persistedAction);
     }
 }

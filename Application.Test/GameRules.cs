@@ -36,7 +36,7 @@ public class GameRules
             ]
         };
         
-        var status = _tickToeHandler.GetGameStatus(state1);
+        var status = _tickToeHandler.GetGameStatus(state1.Cells);
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
@@ -50,7 +50,7 @@ public class GameRules
             ]
         };
         
-        status = _tickToeHandler.GetGameStatus(state2);
+        status = _tickToeHandler.GetGameStatus(state2.Cells);
         Assert.True(GameStatusEnum.WinnerO ==  status , "Winner should be O in state1" );
 
 
@@ -64,7 +64,7 @@ public class GameRules
             ]
         };
         
-        status = _tickToeHandler.GetGameStatus(state3);
+        status = _tickToeHandler.GetGameStatus(state3.Cells);
         Assert.True(GameStatusEnum.WinnerO ==  status , "Winner should be O in state1" );
         
     }
@@ -83,7 +83,7 @@ public class GameRules
             ]
         };
         
-        var status = _tickToeHandler.GetGameStatus(state1);
+        var status = _tickToeHandler.GetGameStatus(state1.Cells);
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
@@ -97,7 +97,7 @@ public class GameRules
             ]
         };
         
-        status = _tickToeHandler.GetGameStatus(state2);
+        status = _tickToeHandler.GetGameStatus(state2.Cells);
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
@@ -111,7 +111,7 @@ public class GameRules
             ]
         };
         
-        status = _tickToeHandler.GetGameStatus(state3);
+        status = _tickToeHandler.GetGameStatus(state3.Cells);
         Assert.True(GameStatusEnum.WinnerO ==  status , "Winner should be O in state1" );
 
         
@@ -134,7 +134,7 @@ public class GameRules
             ]
         };
         
-        var status = _tickToeHandler.GetGameStatus(state1);
+        var status = _tickToeHandler.GetGameStatus(state1.Cells);
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
 
 
@@ -148,7 +148,7 @@ public class GameRules
             ]
         };
         
-        status = _tickToeHandler.GetGameStatus(state2);
+        status = _tickToeHandler.GetGameStatus(state2.Cells);
         Assert.True(GameStatusEnum.WinnerX ==  status , "Winner should be X in state1" );
         
     }
@@ -167,7 +167,7 @@ public class GameRules
             ]
         };
         
-        var status = _tickToeHandler.GetGameStatus(state1);
+        var status = _tickToeHandler.GetGameStatus(state1.Cells);
         Assert.True(GameStatusEnum.ShouldContinue ==  status , "There should be no winner in state1 .. Game must go on" );
         
     }
@@ -186,7 +186,7 @@ public class GameRules
             ]
         };
         
-        var status = _tickToeHandler.GetGameStatus(state1);
+        var status = _tickToeHandler.GetGameStatus(state1.Cells);
         Assert.True(GameStatusEnum.Draw ==  status , "should be draw in state1 , no winner!" );
     }
     
@@ -205,7 +205,7 @@ public class GameRules
             ]
         };
         
-        var status = _tickToeHandler.GetGameStatus(state1);
+        var status = _tickToeHandler.GetGameStatus(state1.Cells);
         Assert.True(GameStatusEnum.ShouldContinue ==  status , $"should be draw in state1 , no winner! NOT {status}" );
     }
 }

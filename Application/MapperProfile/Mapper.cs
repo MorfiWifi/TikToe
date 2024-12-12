@@ -29,7 +29,7 @@ public static class Mapper
             result.UserTurn = gameStatus.Turn == 'o' ? gameStatus.OPlayer : gameStatus.XPlayer;
         }
 
-        result.Status = tickToeHandler.GetGameStatus(result);
+        result.Status = tickToeHandler.GetGameStatus(result.Cells);
 
         return result;
     }
